@@ -28,6 +28,7 @@ func main() {
     router.HandleFunc("/", Index)
     router.HandleFunc("/part/{partId}", PartHandler)
     router.HandleFunc("/part/{partId}/label", PartLabelHandler)
+    router.HandleFunc("/parts", PartsIndexHandler)
     fmt.Println("Inventory api listening on port 8080")
     log.Fatal(http.ListenAndServe(":8080", router))
 }
@@ -43,6 +44,17 @@ func PartHandler(w http.ResponseWriter, r *http.Request) {
 
     p := Part{Id: partId, Brief: "M3 x 12mm screws", Description: "", Quantity: 75}
     json.NewEncoder(w).Encode(p)
+}
+
+func PartsIndexHandler(w http.ResponseWriter, r *http.Request) {
+    // TODO: pull from db
+    parts := []Part{
+        Part{Id: "1", Brief: "M3 x 12mm screws", Description: "", Quantity: 75},
+        Part{Id: "2", Brief: "Red Leds", Description: "", Quantity: 20},
+        Part{Id: "3", Brief: "M4 x 10mm screws", Description: "", Quantity: 100},
+    }
+
+    json.NewEncoder(w).Encode(parts)
 }
 
 func PartLabelHandler(w http.ResponseWriter, r *http.Request) {

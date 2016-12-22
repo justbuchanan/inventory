@@ -92,10 +92,10 @@ func PartHandler(w http.ResponseWriter, r *http.Request) {
 	partId := vars["partId"]
 
 	var part Part
-	assoc := db.Where(&Part{Id: partId}).First(&part)
+	err := db.Where(&Part{Id: partId}).First(&part).Error
 
 	// 404 if no part exists with that id
-	if assoc.Error == gorm.ErrRecordNotFound {
+	if err == gorm.ErrRecordNotFound {
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprintf(w, "No part found for id %q\n", partId)
 		return

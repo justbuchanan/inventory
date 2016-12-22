@@ -23,7 +23,7 @@ COPY backend ./backend
 COPY protractor.conf.js tslint.json karma.conf.js angular-cli.json ./
 COPY src ./src
 # TODO: fix ng build
-RUN ng build || true
+RUN ng build --env=prod || true
 
 VOLUME "/data"
 EXPOSE 8080

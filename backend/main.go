@@ -48,6 +48,7 @@ func main() {
 	// parts "api" routes
 	router.HandleFunc("/part/{partId}", PartHandler)
 	router.HandleFunc("/part/{partId}/label", PartLabelHandler)
+	router.HandleFunc("/part", PartCreateHandler).Methods("POST")
 	router.HandleFunc("/parts", PartsIndexHandler)
 
 	// serve angular frontend
@@ -62,6 +63,30 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("GET %q\n", path)
 }
 
+func PartCreateHandler(w http.ResponseWriter, r *http.Request) {
+	path := html.EscapeString(r.URL.Path)
+	fmt.Printf("POST %q\n", path)
+
+	decoder := json.NewDecoder(r.Body)
+	var part Part
+	err := decoder.Decode(&part)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprintf(w, "Invalid json")
+		return
+	}
+
+	// try to create a new part in the db
+	err = db.Create(&part).Error
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprintf(w, string(err.Error()))
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
+}
+
 func PartHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	partId := vars["partId"]
@@ -71,7 +96,7 @@ func PartHandler(w http.ResponseWriter, r *http.Request) {
 
 	// 404 if no part exists with that id
 	if assoc.Error == gorm.ErrRecordNotFound {
-		w.WriteHeader(404)
+		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprintf(w, "No part found for id %q\n", partId)
 		return
 	}

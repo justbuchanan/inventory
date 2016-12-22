@@ -52,8 +52,17 @@ func PartHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func PartsIndexHandler(w http.ResponseWriter, r *http.Request) {
+	path := html.EscapeString(r.URL.Path)
+	fmt.Printf("GET %q\n", path)
+
 	// TODO: pull from db
 	parts := []Part{
+		Part{Id: "1", Brief: "M3 x 12mm screws", Description: "", Quantity: 75},
+		Part{Id: "2", Brief: "Red Leds", Description: "", Quantity: 20},
+		Part{Id: "3", Brief: "M4 x 10mm screws", Description: "", Quantity: 100},
+		Part{Id: "1", Brief: "M3 x 12mm screws", Description: "", Quantity: 75},
+		Part{Id: "2", Brief: "Red Leds", Description: "", Quantity: 20},
+		Part{Id: "3", Brief: "M4 x 10mm screws", Description: "", Quantity: 100},
 		Part{Id: "1", Brief: "M3 x 12mm screws", Description: "", Quantity: 75},
 		Part{Id: "2", Brief: "Red Leds", Description: "", Quantity: 20},
 		Part{Id: "3", Brief: "M4 x 10mm screws", Description: "", Quantity: 100},

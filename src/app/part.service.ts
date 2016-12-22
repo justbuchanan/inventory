@@ -1,15 +1,30 @@
 import { Injectable } from '@angular/core';
-import { Part } from './part';
+import { Headers, Http } from '@angular/http';
+import 'rxjs/add/operator/toPromise';
 
-import { PARTS } from './mock-parts';
+import { Part } from './part';
 
 @Injectable()
 export class PartService {
+    constructor(private http: Http) { }
 
-  constructor() { }
+    getParts(): Promise<Part[]> {
+        return this.http.get('parts')
+            .toPromise()
+            .then(response => {
+                var parts: Part[] = response.json() as Part[];
+                return parts;
+            })
+            .then(parts => {
+                console.log(parts);
+                return parts;
+            })
+            .catch(this.handleError);
+    }
 
-  getParts(): Promise<Part[]> {
-      return Promise.resolve(PARTS);
-  }
+    private handleError(error: any): Promise<any> {
+        console.error('An error occurred', error);
+        return Promise.reject(error.message || error);
+    }
 
 }

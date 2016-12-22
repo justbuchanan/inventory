@@ -2,8 +2,8 @@
     {{title}}
 
     <ul class="parts">
-        <li *ngFor="let part of parts">
+        <div *ngFor="let part of parts">
             <app-part [part]="part"></app-part>
-        </li>
+        </div>
     </ul>
 </h1>

@@ -7,7 +7,7 @@ import { Part } from './part';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'app works!';
+  title = 'Shop Inventory';
   parts: Part[] = [
       {
           id: "abcd",

@@ -25,10 +25,15 @@ type Part struct {
 
 func main() {
 	router := mux.NewRouter().StrictSlash(true)
-	router.HandleFunc("/", Index)
+
+	// parts "api" routes
 	router.HandleFunc("/part/{partId}", PartHandler)
 	router.HandleFunc("/part/{partId}/label", PartLabelHandler)
 	router.HandleFunc("/parts", PartsIndexHandler)
+
+	// serve angular frontend
+	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./dist/")))
+
 	fmt.Println("Inventory api listening on port 8080")
 	log.Fatal(http.ListenAndServe(":8080", router))
 }

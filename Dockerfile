@@ -23,7 +23,5 @@ RUN ls
 # TODO: fix ng build
 RUN ng build || true
 
-EXPOSE 3000
-# CMD ["npm", "start"]
 EXPOSE 8080
 CMD ["go", "run", "backend/main.go"]

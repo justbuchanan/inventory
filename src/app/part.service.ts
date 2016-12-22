@@ -16,7 +16,6 @@ export class PartService {
                 return parts;
             })
             .then(parts => {
-                console.log(parts);
                 return parts;
             })
             .catch(this.handleError);

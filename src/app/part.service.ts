@@ -9,7 +9,7 @@ export class PartService {
     constructor(private http: Http) { }
 
     getParts(): Promise<Part[]> {
-        return this.http.get('parts')
+        return this.http.get('api/parts')
             .toPromise()
             .then(response => {
                 var parts: Part[] = response.json() as Part[];

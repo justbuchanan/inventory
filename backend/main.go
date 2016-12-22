@@ -46,10 +46,11 @@ func main() {
 	router := mux.NewRouter().StrictSlash(true)
 
 	// parts "api" routes
-	router.HandleFunc("/part/{partId}", PartHandler)
-	router.HandleFunc("/part/{partId}/label", PartLabelHandler)
-	router.HandleFunc("/part", PartCreateHandler).Methods("POST")
-	router.HandleFunc("/parts", PartsIndexHandler)
+	api := router.PathPrefix("/api").Subrouter()
+	api.HandleFunc("/part/{partId}", PartHandler)
+	api.HandleFunc("/part/{partId}/label", PartLabelHandler)
+	api.HandleFunc("/part", PartCreateHandler).Methods("POST")
+	api.HandleFunc("/parts", PartsIndexHandler)
 
 	// serve angular frontend
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./dist/")))

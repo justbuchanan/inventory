@@ -140,8 +140,9 @@ func PartLabelHandler(w http.ResponseWriter, r *http.Request) {
 	outpath := tmpdir + "/" + part.Id
 
 	// generate label using python script
-	// TODO: change path to python file
-	cmd := exec.Command("/home/justin/src/justin/dymo-python/main.py",
+	dir, _ := os.Getwd()
+	fmt.Println(dir)
+	cmd := exec.Command(dir + "/dymo-labelgen/main.py",
 		part.Brief,
 		"https://inventory.justbuchanan.com/part/"+part.Id,
 		"--bbox",

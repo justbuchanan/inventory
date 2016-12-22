@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"bytes"
 	"fmt"
 	"html"
@@ -29,10 +30,13 @@ type Part struct {
 var db *gorm.DB
 
 func main() {
+	dbPath := flag.String("dbpath", "./parts.sqlite3db", "Path to sqlite3 database file")
+	flag.Parse()
+
 	// sqlite3 database
-	fmt.Println("Connecting to database")
+	fmt.Printf("Connecting to database: %q\n", *dbPath)
 	// TODO: error handling?
-	db, _ = gorm.Open("sqlite3", "./parts.sqlite3db")
+	db, _ = gorm.Open("sqlite3", *dbPath)
 	defer db.Close()
 	db.LogMode(true)
 

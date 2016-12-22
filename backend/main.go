@@ -85,7 +85,8 @@ func PartLabelHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	outpath := tmpdir + "/label.pdf"
+	filename := p.Id + "-label.pdf"
+	outpath := tmpdir + "/" + p.Id
 
 	// generate label using python script
 	// TODO: change path to python file
@@ -120,7 +121,7 @@ func PartLabelHandler(w http.ResponseWriter, r *http.Request) {
 
 	// set header info
 	w.Header().Set("Content-Type", "application/pdf")
-	w.Header().Set("Content-Disposition", "attachment; filename=\"file.pdf\"") // TODO: this doesn't work
+	w.Header().Set("Content-Disposition", "attachment; filename=\"" + filename + "\"")
 	w.Header().Set("Content-Length", strconv.FormatInt(pdfSize, 10))
 
 	// write pdf to http response

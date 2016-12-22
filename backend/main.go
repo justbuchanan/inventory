@@ -14,6 +14,9 @@ import (
 
 	"encoding/json"
 	"github.com/gorilla/mux"
+
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
 type Part struct {
@@ -23,7 +26,19 @@ type Part struct {
 	Quantity    uint64 `json:"quantity"`
 }
 
+var db *gorm.DB
+
 func main() {
+	// sqlite3 database
+	fmt.Println("Connecting to database")
+	// TODO: error handling?
+	db, _ = gorm.Open("sqlite3", "./parts.sqlite3db")
+	defer db.Close()
+	db.LogMode(true)
+
+	// setup schema
+	db.AutoMigrate(&Part{})
+
 	router := mux.NewRouter().StrictSlash(true)
 
 	// parts "api" routes
@@ -55,18 +70,8 @@ func PartsIndexHandler(w http.ResponseWriter, r *http.Request) {
 	path := html.EscapeString(r.URL.Path)
 	fmt.Printf("GET %q\n", path)
 
-	// TODO: pull from db
-	parts := []Part{
-		Part{Id: "1", Brief: "M3 x 12mm screws", Description: "", Quantity: 75},
-		Part{Id: "2", Brief: "Red Leds", Description: "", Quantity: 20},
-		Part{Id: "3", Brief: "M4 x 10mm screws", Description: "", Quantity: 100},
-		Part{Id: "1", Brief: "M3 x 12mm screws", Description: "", Quantity: 75},
-		Part{Id: "2", Brief: "Red Leds", Description: "", Quantity: 20},
-		Part{Id: "3", Brief: "M4 x 10mm screws", Description: "", Quantity: 100},
-		Part{Id: "1", Brief: "M3 x 12mm screws", Description: "", Quantity: 75},
-		Part{Id: "2", Brief: "Red Leds", Description: "", Quantity: 20},
-		Part{Id: "3", Brief: "M4 x 10mm screws", Description: "", Quantity: 100},
-	}
+	var parts []Part
+	db.Find(&parts)
 
 	json.NewEncoder(w).Encode(parts)
 }

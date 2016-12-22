@@ -119,23 +119,31 @@ func PartLabelHandler(w http.ResponseWriter, r *http.Request) {
 	partId := vars["partId"]
 
 	// lookup part
-	// TODO: pull info from database
-	p := Part{Id: partId, Brief: "M3 x 12mm screws", Description: "", Quantity: 75}
+	var part Part
+	err := db.Where(&Part{Id: partId}).First(&part).Error
+
+	// 404 if no part exists with that id
+	if err == gorm.ErrRecordNotFound {
+		w.WriteHeader(http.StatusNotFound)
+		fmt.Fprintf(w, "No part found for id %q\n", partId)
+		return
+	}
 
 	// create tmp dir to write label into
-	tmpdir, err := ioutil.TempDir("/tmp", "inventory")
+	var tmpdir string
+	tmpdir, err = ioutil.TempDir("/tmp", "inventory")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	filename := p.Id + "-label.pdf"
-	outpath := tmpdir + "/" + p.Id
+	filename := part.Id + "-label.pdf"
+	outpath := tmpdir + "/" + part.Id
 
 	// generate label using python script
 	// TODO: change path to python file
 	cmd := exec.Command("/home/justin/src/justin/dymo-python/main.py",
-		p.Brief,
-		"https://inventory.justbuchanan.com/part/"+p.Id,
+		part.Brief,
+		"https://inventory.justbuchanan.com/part/"+part.Id,
 		"--bbox",
 		"--size=small",
 		"--output="+outpath)

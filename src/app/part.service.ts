@@ -8,8 +8,8 @@ export class PartService {
 
   constructor() { }
 
-  getParts(): Part[] {
-      return PARTS;
+  getParts(): Promise<Part[]> {
+      return Promise.resolve(PARTS);
   }
 
 }

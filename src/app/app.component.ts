@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
   }
 
   getParts(): void {
-    this.parts = this.partService.getParts();
+    this.partService.getParts().then(parts => this.parts = parts);
   }
 
   title = 'Shop Inventory';

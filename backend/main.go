@@ -66,8 +66,17 @@ func PartHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	partId := vars["partId"]
 
-	p := Part{Id: partId, Brief: "M3 x 12mm screws", Description: "", Quantity: 75}
-	json.NewEncoder(w).Encode(p)
+	var part Part
+	assoc := db.Where(&Part{Id: partId}).First(&part)
+
+	// 404 if no part exists with that id
+	if assoc.Error == gorm.ErrRecordNotFound {
+		w.WriteHeader(404)
+		fmt.Fprintf(w, "No part found for id %q\n", partId)
+		return
+	}
+
+	json.NewEncoder(w).Encode(part)
 }
 
 func PartsIndexHandler(w http.ResponseWriter, r *http.Request) {

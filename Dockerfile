@@ -23,6 +23,6 @@ COPY src ./src
 # TODO: fix ng build
 RUN ng build || true
 
-VOLUME "/data'"
+VOLUME "/data"
 EXPOSE 8080
 CMD ["go", "run", "backend/main.go", "--dbpath", "/data/parts.sqlite3db"]

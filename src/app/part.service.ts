@@ -5,4 +5,6 @@ export class PartService {
 
   constructor() { }
 
+  getParts(): void {}
+
 }

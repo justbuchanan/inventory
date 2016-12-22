@@ -1,3 +1,9 @@
 <h1>
-  {{title}}
+    {{title}}
+
+    <ul class="parts">
+        <li *ngFor="let part of parts">
+            <app-part [part]="part"></app-part>
+        </li>
+    </ul>
 </h1>

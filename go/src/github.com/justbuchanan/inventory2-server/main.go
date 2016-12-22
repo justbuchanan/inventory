@@ -7,6 +7,9 @@ import (
     "net/http"
     "os/exec"
     "bytes"
+    "io/ioutil"
+    "os"
+    "io"
 
     "encoding/json"
     "github.com/gorilla/mux"
@@ -46,20 +49,34 @@ func PartLabelHandler(w http.ResponseWriter, r *http.Request) {
     partId := vars["partId"]
     p := Part{Id: partId, Brief: "M3 x 12mm screws", Description: "", Quantity: 75}
 
+    tmpdir, err := ioutil.TempDir("/tmp", "inventory")
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    outpath := tmpdir + "/label.pdf"
+
     cmd := exec.Command("/home/justin/src/justin/dymo-python/main.py",
         p.Brief,
         "https://inventory.justbuchanan.com/part/" + p.Id,
         "--bbox",
         "--size=small",
-        "--output=/tmp/label.pdf")
+        "--output=" + outpath)
     var out bytes.Buffer
     cmd.Stdout = &out
-    err := cmd.Run()
+    err = cmd.Run()
     if err != nil {
         log.Fatal(err)
     }
     fmt.Printf(string(out.Bytes()))
 
-    json.NewEncoder(w).Encode(p)
-    fmt.Fprintln(w, "label")
+    pdfdata, err := os.Open(outpath)
+    if err != nil {
+        log.Fatal(err)
+    }
+    defer pdfdata.Close()
+
+    io.Copy(w, pdfdata)
+
+    w.Header().Set("Content-Type", "application/pdf")
 }

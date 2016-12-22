@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Part } from './part';
+import { PARTS } from './mock-parts';
 
 @Component({
   selector: 'app-root',
@@ -8,19 +9,5 @@ import { Part } from './part';
 })
 export class AppComponent {
   title = 'Shop Inventory';
-  parts: Part[] = [
-      {
-          id: "abcd",
-          brief: "M3 screws",
-          description: "",
-          quantity: 100,
-      },
-      {
-          id: "1234",
-          brief: "Red Leds",
-          description: "",
-          quantity: 15,
-      }
-  ]
-
+  parts: Part[] = PARTS;
 }

@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { MdCardModule } from '@angular2-material/card';
+import { MdToolbarModule } from '@angular2-material/toolbar';
 
 import { AppComponent } from './app.component';
 import { PartComponent } from './part/part.component';
@@ -17,6 +18,7 @@ import { PartComponent } from './part/part.component';
     FormsModule,
     HttpModule,
     MdCardModule,
+    MdToolbarModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

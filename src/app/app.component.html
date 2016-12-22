@@ -1,9 +1,9 @@
-<h1>
-    {{title}}
+<md-toolbar [color]="primary">
+<span>{{title}}</span>
+</md-toolbar>
 
-    <ul class="parts">
-        <div *ngFor="let part of parts">
-            <app-part [part]="part"></app-part>
-        </div>
-    </ul>
-</h1>
+<ul class="parts">
+    <div *ngFor="let part of parts">
+        <app-part [part]="part"></app-part>
+    </div>
+</ul>

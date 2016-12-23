@@ -12,6 +12,7 @@ import (
 	"os"
 	"os/exec"
 	"strconv"
+	"math/rand"
 
 	"encoding/json"
 	"github.com/gorilla/mux"
@@ -30,6 +31,8 @@ type Part struct {
 var db *gorm.DB
 
 func main() {
+	// TODO: seed rng
+
 	dbPath := flag.String("dbpath", "./parts.sqlite3db", "Path to sqlite3 database file")
 	flag.Parse()
 
@@ -47,10 +50,10 @@ func main() {
 
 	// parts "api" routes
 	api := router.PathPrefix("/api").Subrouter()
-	api.HandleFunc("/part/{partId}", PartHandler)
-	api.HandleFunc("/part/{partId}/label", PartLabelHandler)
-	api.HandleFunc("/part", PartCreateHandler).Methods("POST")
-	api.HandleFunc("/parts", PartsIndexHandler)
+	api.HandleFunc("/part/{partId}", PartHandler).Methods("GET")
+	api.HandleFunc("/part/{partId}/label", PartLabelHandler).Methods("GET")
+	api.HandleFunc("/parts", PartCreateHandler).Methods("POST")
+	api.HandleFunc("/parts", PartsIndexHandler).Methods("GET")
 
 	// serve angular frontend
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./dist/")))
@@ -62,6 +65,33 @@ func main() {
 func Index(w http.ResponseWriter, r *http.Request) {
 	path := html.EscapeString(r.URL.Path)
 	fmt.Printf("GET %q\n", path)
+}
+
+// Random generation borrowed from here:
+// http://stackoverflow.com/questions/22892120/how-to-generate-a-random-string-of-a-fixed-length-in-golang
+func GenerateRandomId() string {
+	const length = 4
+	const letters = "abcdefghijklmnopqrstuvwxyz0123456789"
+	b := make([]byte, length)
+	for i := range b {
+		b[i] = letters[rand.Intn(len(letters))]
+	}
+	return string(b)
+}
+
+func GenerateUniqueId() string {
+	for {
+		id := GenerateRandomId()
+		var count uint64
+		err := db.Model(&Part{}).Where("id = ?", id).Count(&count).Error
+		if err != nil {
+			log.Fatal(err)
+			return ""
+		}
+		if count == 0 {
+			return id
+		}
+	}
 }
 
 func PartCreateHandler(w http.ResponseWriter, r *http.Request) {
@@ -77,6 +107,9 @@ func PartCreateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// assign a unique id
+	part.Id = GenerateUniqueId()
+
 	// try to create a new part in the db
 	err = db.Create(&part).Error
 	if err != nil {
@@ -86,6 +119,7 @@ func PartCreateHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(part)
 }
 
 func PartHandler(w http.ResponseWriter, r *http.Request) {

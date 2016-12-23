@@ -54,6 +54,7 @@ func main() {
 	api.HandleFunc("/part/{partId}/label", PartLabelHandler).Methods("GET")
 	api.HandleFunc("/parts", PartCreateHandler).Methods("POST")
 	api.HandleFunc("/parts", PartsIndexHandler).Methods("GET")
+	api.HandleFunc("/part/{partId}", PartUpdateHandler).Methods("PUT")
 
 	// serve angular frontend
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./dist/")))
@@ -119,6 +120,33 @@ func PartCreateHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(part)
+}
+
+func PartUpdateHandler(w http.ResponseWriter, r *http.Request) {
+	path := html.EscapeString(r.URL.Path)
+	fmt.Printf("POST %q\n", path)
+
+	vars := mux.Vars(r)
+	partId := vars["partId"]
+
+	decoder := json.NewDecoder(r.Body)
+	var part Part
+	err := decoder.Decode(&part)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprintf(w, "Invalid json")
+		return
+	}
+
+	part.Id = "" // clear part id so it doesn't get set by the update
+	err = db.Model(&part).Where("id = ?", partId).Updates(part).Error
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprintf(w, string(err.Error()))
+		return
+	}
+
 	json.NewEncoder(w).Encode(part)
 }
 

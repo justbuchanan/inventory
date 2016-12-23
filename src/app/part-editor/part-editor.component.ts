@@ -2,6 +2,10 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Part } from '../part';
 import { PartService } from '../part.service';
 
+import { Router, ActivatedRoute, Params } from '@angular/router';
+import 'rxjs/add/operator/switchMap';
+import { Observable } from 'rxjs/Observable';
+
 @Component({
   selector: 'app-part-editor',
   templateUrl: './part-editor.component.html',
@@ -9,9 +13,23 @@ import { PartService } from '../part.service';
 })
 export class PartEditorComponent implements OnInit {
 
-  constructor(private partService: PartService) { }
+  constructor(
+      private route: ActivatedRoute,
+      private router: Router,
+      private partService: PartService
+   ) { }
 
   ngOnInit() {
+      const url: Observable<string> = this.route.url.map(segments => segments.join(''));
+      url.subscribe(
+          value => this.isNewPart = value == 'create',
+          error => console.log(error),
+          () => console.log('finished')
+      )
+
+      this.route.params
+          .switchMap((params: Params) => this.partService.getPart(params['id']))
+          .subscribe((part: Part) => this.part = part);
   }
 
   onSubmit() {
@@ -21,9 +39,13 @@ export class PartEditorComponent implements OnInit {
       });
   }
 
+  // TODO: wire this to button
+  onCancel() {
+      this.router.navigate(['/']);
+  }
+
   @Input()
   part: Part;
 
-  @Input()
   isNewPart: boolean;
 }

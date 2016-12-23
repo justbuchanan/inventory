@@ -1,0 +1,11 @@
+<div>
+    <ul class="parts">
+        <div *ngFor="let part of parts">
+            <app-part [part]="part">
+                
+            </app-part>
+            <!-- TODO: put button inside part component and wire events -->
+            <button md-button color="warn" (click)="onEditPart(part)">Edit</button>
+        </div>
+    </ul>
+</div>

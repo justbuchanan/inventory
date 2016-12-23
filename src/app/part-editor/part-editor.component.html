@@ -1,4 +1,5 @@
-<md-card>
+
+<md-card *ngIf="part">
     <!-- <md-toolbar>Basic</md-toolbar> -->
     <md-card-title> {{ isNewPart ? "Create Part" : "Edit Parts" }}</md-card-title>
 <form (ngSubmit)="onSubmit()" #partForm="ngForm">
@@ -13,7 +14,7 @@
         <button type="submit" md-raised-button [disabled]="!partForm.form.valid">
             Save
         </button>
-        <button md-raised-button color=warn>
+        <button md-raised-button (click)="onCancel()" color=warn>
             Cancel
         </button>
     </md-card-actions>

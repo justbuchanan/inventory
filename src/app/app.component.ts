@@ -1,38 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { Part } from './part';
-import { PartService } from './part.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers: [PartService],
+  providers: [],
 })
 export class AppComponent implements OnInit {
-  constructor(private partService: PartService) {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
-    this.getParts();
-    // this.addPartClicked(null); // TODO: rm
-  }
-
-  getParts(): void {
-    this.partService.getParts().then(parts => this.parts = parts);
   }
 
   addPartClicked(event) {
-    this.editingPart = {
-        id: "1234",
-        brief: "Red Leds",
-        description: "desc todo",
-        quantity: 15,
-    }
-    this.creatingNewPart = true;
+    this.router.navigate(['/create'])
   }
 
   title = 'Shop Inventory';
   parts: Part[];
-
-  editingPart: Part;
-  creatingNewPart: boolean;
 }

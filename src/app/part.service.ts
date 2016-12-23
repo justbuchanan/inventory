@@ -31,6 +31,16 @@ export class PartService {
         .catch(this.handleError);
     }
 
+    getPart(id: string): Promise<Part> {
+        return this.http.get('api/part/' + id)
+        .toPromise()
+        .then(response => {
+            var part: Part = response.json() as Part;
+            return part;
+        })
+        .catch(this.handleError);
+    }
+
     private handleError(error: any): Promise<any> {
         console.error('An error occurred', error);
         return Promise.reject(error.message || error);

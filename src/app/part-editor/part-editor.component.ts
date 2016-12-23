@@ -20,6 +20,8 @@ export class PartEditorComponent implements OnInit {
    ) { }
 
   ngOnInit() {
+      // TODO: is there a better way to handle edit vs create?
+
       const url: Observable<string> = this.route.url.map(segments => segments.join(''));
       url.subscribe(
           value => this.isNewPart = value == 'create',
@@ -28,18 +30,32 @@ export class PartEditorComponent implements OnInit {
       )
 
       this.route.params
-          .switchMap((params: Params) => this.partService.getPart(params['id']))
+          .switchMap((params: Params) => {
+              if (params['id'] != null) {
+                  return this.partService.getPart(params['id'])
+              } else {
+                  return new Promise<Part>(function (resolve, reject) {
+                      resolve(new Part);
+                  })
+              }
+          })
           .subscribe((part: Part) => this.part = part);
   }
 
+  // TODO: error handling
   onSubmit() {
-      console.log('submit')
-      this.partService.createPart(this.part).then(part => {
-          console.log("created part!" + JSON.stringify(part))
-      });
+      if (this.isNewPart) {
+          console.log('submit')
+          this.partService.createPart(this.part).then(part => {
+              console.log("created part!" + JSON.stringify(part))
+              // back to home screen
+              this.router.navigate(['/'])
+          });
+      } else {
+          // TODO: update part
+      }
   }
 
-  // TODO: wire this to button
   onCancel() {
       this.router.navigate(['/']);
   }

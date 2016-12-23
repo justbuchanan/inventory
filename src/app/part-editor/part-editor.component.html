@@ -1,3 +1,21 @@
-<p>
-  part-editor works!
-</p>
+<md-card>
+    <!-- <md-toolbar>Basic</md-toolbar> -->
+    <md-card-title> {{ isNewPart ? "Create Part" : "Edit Parts" }}</md-card-title>
+<form (ngSubmit)="onSubmit()" #partForm="ngForm">
+    <md-card-content>
+        <md-card-subtitle>{{ isNewPart ? "ID: TBD" : part.id }}</md-card-subtitle>
+            <table style="width: 100%" cellspacing="0">
+                <tr><md-input [(ngModel)]="part.brief" required name="brief" placeholder="Brief"></md-input></tr>
+                <tr><md-input [(ngModel)]="part.description" name="description" placeholder="Description"></md-input></tr>
+            </table>
+    </md-card-content>
+    <md-card-actions>
+        <button type="submit" md-raised-button [disabled]="!partForm.form.valid">
+            Save
+        </button>
+        <button md-raised-button color=warn>
+            Cancel
+        </button>
+    </md-card-actions>
+</form>
+</md-card>

@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Part } from '../part';
+import { PartService } from '../part.service';
 
 @Component({
   selector: 'app-part-editor',
@@ -7,9 +9,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PartEditorComponent implements OnInit {
 
-  constructor() { }
+  constructor(private partService: PartService) { }
 
   ngOnInit() {
   }
 
+  onSubmit() {
+      console.log('submit')
+      this.partService.createPart(this.part).then(part => {
+          console.log("created part!" + JSON.stringify(part))
+      });
+  }
+
+  @Input()
+  part: Part;
+
+  @Input()
+  isNewPart: boolean;
 }

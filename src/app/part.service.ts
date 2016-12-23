@@ -21,6 +21,16 @@ export class PartService {
             .catch(this.handleError);
     }
 
+    createPart(part: Part): Promise<Part> {
+        return this.http.post('api/parts', JSON.stringify(part))
+        .toPromise()
+        .then(response => {
+            var part: Part = response.json() as Part;
+            return part;
+        })
+        .catch(this.handleError);
+    }
+
     private handleError(error: any): Promise<any> {
         console.error('An error occurred', error);
         return Promise.reject(error.message || error);

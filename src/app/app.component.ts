@@ -13,12 +13,26 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.getParts();
+    // this.addPartClicked(null); // TODO: rm
   }
 
   getParts(): void {
     this.partService.getParts().then(parts => this.parts = parts);
   }
 
+  addPartClicked(event) {
+    this.editingPart = {
+        id: "1234",
+        brief: "Red Leds",
+        description: "desc todo",
+        quantity: 15,
+    }
+    this.creatingNewPart = true;
+  }
+
   title = 'Shop Inventory';
   parts: Part[];
+
+  editingPart: Part;
+  creatingNewPart: boolean;
 }

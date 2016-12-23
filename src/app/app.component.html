@@ -1,13 +1,18 @@
 <md-toolbar [color]="primary">
-<span>{{title}}</span>
+    <span>{{title}}</span>
+    <span style="flex: 1 1 auto;"></span>
+    <button md-button (click)="addPartClicked()"><md-icon>add</md-icon></button>
 </md-toolbar>
 
-<ul class="parts">
-    <div *ngFor="let part of parts">
-        <app-part [part]="part"></app-part>
-    </div>
-</ul>
+<div *ngIf="!editingPart">
+    <ul class="parts">
+        <div *ngFor="let part of parts">
+            <app-part [part]="part"></app-part>
+        </div>
+    </ul>
 
-<button md-fab>
-    <md-icon>add</md-icon>
-</button>
+</div>
+
+<div *ngIf="editingPart">
+    <app-part-editor [part]="editingPart" [isNewPart]="creatingNewPart"> </app-part-editor>
+</div>

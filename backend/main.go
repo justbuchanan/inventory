@@ -4,7 +4,6 @@ import (
 	"flag"
 	"bytes"
 	"fmt"
-	"html"
 	"io"
 	"io/ioutil"
 	"log"
@@ -16,6 +15,7 @@ import (
 
 	"encoding/json"
 	"github.com/gorilla/mux"
+	"github.com/gorilla/handlers"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
@@ -59,12 +59,8 @@ func main() {
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./dist/")))
 
 	fmt.Println("Inventory api listening on port 8080")
-	log.Fatal(http.ListenAndServe(":8080", router))
-}
-
-func Index(w http.ResponseWriter, r *http.Request) {
-	path := html.EscapeString(r.URL.Path)
-	fmt.Printf("GET %q\n", path)
+	loggedRouter := handlers.LoggingHandler(os.Stdout, router)
+	log.Fatal(http.ListenAndServe(":8080", loggedRouter))
 }
 
 // Random generation borrowed from here:
@@ -95,9 +91,6 @@ func GenerateUniqueId() string {
 }
 
 func PartCreateHandler(w http.ResponseWriter, r *http.Request) {
-	path := html.EscapeString(r.URL.Path)
-	fmt.Printf("POST %q\n", path)
-
 	decoder := json.NewDecoder(r.Body)
 	var part Part
 	err := decoder.Decode(&part)
@@ -140,9 +133,6 @@ func PartHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func PartsIndexHandler(w http.ResponseWriter, r *http.Request) {
-	path := html.EscapeString(r.URL.Path)
-	fmt.Printf("GET %q\n", path)
-
 	var parts []Part
 	db.Find(&parts)
 

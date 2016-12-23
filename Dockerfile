@@ -6,7 +6,10 @@ RUN npm install -g angular-cli
 RUN ng version
 
 ENV GOPATH $HOME/go
-RUN go get github.com/gorilla/mux github.com/jinzhu/gorm github.com/jinzhu/gorm/dialects/sqlite
+RUN go get github.com/gorilla/mux \
+    github.com/gorilla/handlers \
+    github.com/jinzhu/gorm \
+    github.com/jinzhu/gorm/dialects/sqlite
 
 RUN mkdir inventory
 WORKDIR inventory

@@ -18,10 +18,6 @@ export class PartListComponent implements OnInit {
   ngOnInit() {
       this.partService.getParts().then(parts => this.parts = parts)
   }
-  
-  onEditPart(part: Part) {
-    this.router.navigate(['/edit', part.id])
-  }
 
   parts: Part[];
 }

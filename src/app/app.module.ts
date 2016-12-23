@@ -8,11 +8,13 @@ import { MdButtonModule } from '@angular2-material/button';
 
 import { AppComponent } from './app.component';
 import { PartComponent } from './part/part.component';
+import { PartEditorComponent } from './part-editor/part-editor.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    PartComponent
+    PartComponent,
+    PartEditorComponent
   ],
   imports: [
     BrowserModule,

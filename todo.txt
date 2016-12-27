@@ -1,0 +1,10 @@
+* Search bar to filter items
+* show and modify item "type"
+* delete items
+* Edit existing item
+* Modify quantity
+* View graph of quantity over time?
+* grid layout?
+* store container locations?
+* improve layout of item card
+* keyboard shortcuts

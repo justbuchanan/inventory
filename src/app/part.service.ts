@@ -41,6 +41,17 @@ export class PartService {
         .catch(this.handleError);
     }
 
+    // TODO: check response code?
+    // TODO: Promise return value?
+    deletePart(id: string): Promise<boolean> {
+        return this.http.delete('api/part/' + id)
+        .toPromise()
+        .then(response => {
+            return true;
+        })
+        .catch(this.handleError);
+    }
+
     private handleError(error: any): Promise<any> {
         console.error('An error occurred', error);
         return Promise.reject(error.message || error);

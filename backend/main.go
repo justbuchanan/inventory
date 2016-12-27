@@ -4,7 +4,6 @@ import (
 	"flag"
 	"bytes"
 	"fmt"
-	"html"
 	"io"
 	"io/ioutil"
 	"log"
@@ -16,6 +15,7 @@ import (
 
 	"encoding/json"
 	"github.com/gorilla/mux"
+	"github.com/gorilla/handlers"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
@@ -51,6 +51,7 @@ func main() {
 	// parts "api" routes
 	api := router.PathPrefix("/api").Subrouter()
 	api.HandleFunc("/part/{partId}", PartHandler).Methods("GET")
+	api.HandleFunc("/part/{partId}", PartDeleteHandler).Methods("DELETE")
 	api.HandleFunc("/part/{partId}/label", PartLabelHandler).Methods("GET")
 	api.HandleFunc("/parts", PartCreateHandler).Methods("POST")
 	api.HandleFunc("/parts", PartsIndexHandler).Methods("GET")
@@ -60,19 +61,15 @@ func main() {
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./dist/")))
 
 	fmt.Println("Inventory api listening on port 8080")
-	log.Fatal(http.ListenAndServe(":8080", router))
-}
-
-func Index(w http.ResponseWriter, r *http.Request) {
-	path := html.EscapeString(r.URL.Path)
-	fmt.Printf("GET %q\n", path)
+	loggedRouter := handlers.LoggingHandler(os.Stdout, router)
+	log.Fatal(http.ListenAndServe(":8080", loggedRouter))
 }
 
 // Random generation borrowed from here:
 // http://stackoverflow.com/questions/22892120/how-to-generate-a-random-string-of-a-fixed-length-in-golang
 func GenerateRandomId() string {
 	const length = 4
-	const letters = "abcdefghijklmnopqrstuvwxyz0123456789"
+	const letters = "abcdef0123456789"
 	b := make([]byte, length)
 	for i := range b {
 		b[i] = letters[rand.Intn(len(letters))]
@@ -95,10 +92,21 @@ func GenerateUniqueId() string {
 	}
 }
 
-func PartCreateHandler(w http.ResponseWriter, r *http.Request) {
-	path := html.EscapeString(r.URL.Path)
-	fmt.Printf("POST %q\n", path)
+func PartDeleteHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	partId := vars["partId"]
 
+	err := db.Delete(&Part{Id: partId}).Error
+	if err != nil {
+		log.Fatal(err)
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprintf(w, string(err.Error()))
+		return
+	}
+	// TODO: set deleted status code
+}
+
+func PartCreateHandler(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	var part Part
 	err := decoder.Decode(&part)
@@ -168,9 +176,6 @@ func PartHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func PartsIndexHandler(w http.ResponseWriter, r *http.Request) {
-	path := html.EscapeString(r.URL.Path)
-	fmt.Printf("GET %q\n", path)
-
 	var parts []Part
 	db.Find(&parts)
 

@@ -51,6 +51,7 @@ func main() {
 	// parts "api" routes
 	api := router.PathPrefix("/api").Subrouter()
 	api.HandleFunc("/part/{partId}", PartHandler).Methods("GET")
+	api.HandleFunc("/part/{partId}", PartDeleteHandler).Methods("DELETE")
 	api.HandleFunc("/part/{partId}/label", PartLabelHandler).Methods("GET")
 	api.HandleFunc("/parts", PartCreateHandler).Methods("POST")
 	api.HandleFunc("/parts", PartsIndexHandler).Methods("GET")
@@ -88,6 +89,20 @@ func GenerateUniqueId() string {
 			return id
 		}
 	}
+}
+
+func PartDeleteHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	partId := vars["partId"]
+
+	err := db.Delete(&Part{Id: partId}).Error
+	if err != nil {
+		log.Fatal(err)
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprintf(w, string(err.Error()))
+		return
+	}
+	// TODO: set deleted status code
 }
 
 func PartCreateHandler(w http.ResponseWriter, r *http.Request) {

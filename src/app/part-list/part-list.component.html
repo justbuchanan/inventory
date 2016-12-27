@@ -1,7 +1,7 @@
 <div>
     <ul class="parts">
         <div *ngFor="let part of parts">
-            <app-part [part]="part"></app-part>
+            <app-part [part]="part" (delete)="this.deletePart($event)"></app-part>
         </div>
     </ul>
 </div>

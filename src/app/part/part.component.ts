@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Part } from '../part';
 import { PartService } from '../part.service';
 import { Router } from '@angular/router';
@@ -18,13 +18,15 @@ export class PartComponent {
     // TODO: should this logic go in the list view?
     // TODO: if so, remove part service
     // TODO: confirm
-    onDeletePart() {
-        this.partService.deletePart(this.part.id)
-        .then(success => {
-            // TODO: reload part list?
-        });
-    }
+    // onDeletePart() {
+    //     this.partService.deletePart(this.part.id)
+    //     .then(success => {
+    //         // TODO: reload part list?
+    //     });
+    // }
 
   @Input()
   part: Part;
+
+ @Output() delete: EventEmitter<any> = new EventEmitter();
 }

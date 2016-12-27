@@ -8,5 +8,5 @@
     </a>
 
     <button md-raised-button color="warn" (click)="onEditPart()">Edit</button>
-    <button md-raised-button color="warn" (click)="onDeletePart()">Delete</button>
+    <button md-raised-button color="warn" (click)="delete.emit(part.id)">Delete</button>
 </md-card>

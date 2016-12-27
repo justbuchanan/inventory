@@ -1,6 +1,9 @@
 * Search bar to filter items
 * show and modify item "type"
-* delete items
+* refactor item delete
+  * show deletion immediately, dont require a page refresh
+  * animation?
+  * handle logic in part list, not part?
 * Edit existing item
 * Modify quantity
 * View graph of quantity over time?

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 import { Part } from '../part';
 import { PartService } from '../part.service';
 import { Router } from '@angular/router';
@@ -17,6 +17,20 @@ export class PartListComponent implements OnInit {
 
   ngOnInit() {
       this.partService.getParts().then(parts => this.parts = parts)
+  }
+
+  // deletePart(string: partId) {
+  deletePart($event) {
+    // partId: string;
+    var partId = event.target.value;
+    this.partService.deletePart(partId).then(success => {
+      for (var i = 0; i < this.parts.length; i++) {
+        // if (this.parts[i].id == partId) {
+          // this.parts.remove(i);
+          console.log('deleted index ' + i)
+        // } 
+      }
+    })
   }
 
   parts: Part[];

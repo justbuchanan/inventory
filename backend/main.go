@@ -132,9 +132,6 @@ func PartCreateHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func PartUpdateHandler(w http.ResponseWriter, r *http.Request) {
-	path := html.EscapeString(r.URL.Path)
-	fmt.Printf("POST %q\n", path)
-
 	vars := mux.Vars(r)
 	partId := vars["partId"]
 

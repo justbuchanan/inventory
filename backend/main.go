@@ -67,7 +67,7 @@ func main() {
 // http://stackoverflow.com/questions/22892120/how-to-generate-a-random-string-of-a-fixed-length-in-golang
 func GenerateRandomId() string {
 	const length = 4
-	const letters = "abcdefghijklmnopqrstuvwxyz0123456789"
+	const letters = "abcdef0123456789"
 	b := make([]byte, length)
 	for i := range b {
 		b[i] = letters[rand.Intn(len(letters))]

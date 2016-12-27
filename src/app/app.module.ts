@@ -8,6 +8,7 @@ import { MdToolbarModule } from '@angular2-material/toolbar';
 import { MdButtonModule } from '@angular2-material/button';
 import { MdIconModule, MdIconRegistry } from '@angular2-material/icon';
 import { MdInputModule } from '@angular2-material/input';
+import { NgPipesModule } from 'ng-pipes';
 
 import { AppComponent } from './app.component';
 import { PartComponent } from './part/part.component';
@@ -38,6 +39,7 @@ const appRoutes: Routes = [
     MdIconModule,
     MdInputModule,
     RouterModule.forRoot(appRoutes),
+    NgPipesModule,
   ],
   providers: [
     MdIconRegistry,

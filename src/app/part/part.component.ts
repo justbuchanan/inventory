@@ -28,5 +28,5 @@ export class PartComponent {
   @Input()
   part: Part;
 
- @Output() delete: EventEmitter<any> = new EventEmitter();
+ @Output() delete: EventEmitter<String> = new EventEmitter();
 }

@@ -20,15 +20,17 @@ export class PartListComponent implements OnInit {
   }
 
   // deletePart(string: partId) {
-  deletePart($event) {
-    // partId: string;
-    var partId = event.target.value;
+  deletePart(partId: string) {
+    console.log(partId);
+
+    // remove part from local store
     this.partService.deletePart(partId).then(success => {
       for (var i = 0; i < this.parts.length; i++) {
-        // if (this.parts[i].id == partId) {
-          // this.parts.remove(i);
+        if (this.parts[i].id == partId) {
+          this.parts.splice(i, 1);
           console.log('deleted index ' + i)
-        // } 
+          break;
+        }
       }
     })
   }

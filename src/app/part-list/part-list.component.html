@@ -1,4 +1,5 @@
 <div>
+    <md-input [ngModel]='query' placeholder='Search'></md-input>
     <ul class="parts">
         <div *ngFor="let part of parts">
             <app-part [part]="part" (delete)="this.deletePart($event)"></app-part>

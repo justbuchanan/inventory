@@ -2,6 +2,7 @@ import { Component, OnInit, EventEmitter } from '@angular/core';
 import { Part } from '../part';
 import { PartService } from '../part.service';
 import { Router } from '@angular/router';
+import { Fuse } from 'fuse.js';
 
 @Component({
   selector: 'app-part-list',
@@ -16,10 +17,12 @@ export class PartListComponent implements OnInit {
       ) { }
 
   ngOnInit() {
-      this.partService.getParts().then(parts => this.parts = parts)
+      this.partService.getParts().then(parts => {
+        this.parts = parts;
+        this.fuse = new Fuse(this.parts, {keys: ['id', 'brief', 'description']});
+      })
   }
 
-  // deletePart(string: partId) {
   deletePart(partId: string) {
     console.log(partId);
 
@@ -35,5 +38,17 @@ export class PartListComponent implements OnInit {
     })
   }
 
+  onQueryChange() {
+    // if (this.query.length > 0) {
+    //   this.filtered_parts = this.fuse.search(query);
+    // } else {
+    //   this.filtered_parts = this.parts;
+    // }
+  }
+
+  query: string;
+  filtered_parts: Part[];
+
+  fuse: Fuse;
   parts: Part[];
 }

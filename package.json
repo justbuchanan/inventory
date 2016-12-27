@@ -27,6 +27,7 @@
     "@angular2-material/input": "^2.0.0-alpha.8-2",
     "@angular2-material/toolbar": "^2.0.0-alpha.8-2",
     "core-js": "^2.4.1",
+    "fuse.js": "git+https://github.com/krisk/Fuse.git",
     "rxjs": "5.0.0-beta.12",
     "ts-helpers": "^1.1.1",
     "zone.js": "^0.6.23"

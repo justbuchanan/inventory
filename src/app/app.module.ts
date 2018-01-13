@@ -1,25 +1,25 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
-import { MdCardModule } from '@angular2-material/card';
-import { MdToolbarModule } from '@angular2-material/toolbar';
-import { MdButtonModule } from '@angular2-material/button';
-import { MdIconModule, MdIconRegistry } from '@angular2-material/icon';
-import { MdInputModule } from '@angular2-material/input';
-import { NgPipesModule } from 'ng-pipes';
+import { BrowserModule } from "@angular/platform-browser";
+import { NgModule } from "@angular/core";
+import { RouterModule, Routes } from "@angular/router";
+import { FormsModule } from "@angular/forms";
+import { HttpModule } from "@angular/http";
+import { MdCardModule } from "@angular2-material/card";
+import { MdToolbarModule } from "@angular2-material/toolbar";
+import { MdButtonModule } from "@angular2-material/button";
+import { MdIconModule, MdIconRegistry } from "@angular2-material/icon";
+import { MdInputModule } from "@angular2-material/input";
+import { NgPipesModule } from "ng-pipes";
 
-import { AppComponent } from './app.component';
-import { PartComponent } from './part/part.component';
-import { PartEditorComponent } from './part-editor/part-editor.component';
-import { PartListComponent } from './part-list/part-list.component';
-import { PartService } from './part.service';
+import { AppComponent } from "./app.component";
+import { PartComponent } from "./part/part.component";
+import { PartEditorComponent } from "./part-editor/part-editor.component";
+import { PartListComponent } from "./part-list/part-list.component";
+import { PartService } from "./part.service";
 
 const appRoutes: Routes = [
-  { path: 'create', component: PartEditorComponent },
-  { path: 'edit/:id', component: PartEditorComponent },
-  { path: '', component: PartListComponent }
+  { path: "create", component: PartEditorComponent },
+  { path: "edit/:id", component: PartEditorComponent },
+  { path: "", component: PartListComponent }
 ];
 
 @NgModule({
@@ -39,12 +39,9 @@ const appRoutes: Routes = [
     MdIconModule,
     MdInputModule,
     RouterModule.forRoot(appRoutes),
-    NgPipesModule,
+    NgPipesModule
   ],
-  providers: [
-    MdIconRegistry,
-    PartService
-  ],
+  providers: [MdIconRegistry, PartService],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

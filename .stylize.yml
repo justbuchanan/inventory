@@ -1,0 +1,9 @@
+---
+formatters:
+  .go: gofmt
+  .json: prettier
+  .ts: prettier
+exclude:
+  - node_modules/
+  - dist/
+  - dymo_labelgen/

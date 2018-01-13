@@ -1,21 +1,21 @@
 package main
 
 import (
-	"flag"
 	"bytes"
+	"flag"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net/http"
 	"os"
 	"os/exec"
 	"strconv"
-	"math/rand"
 
 	"encoding/json"
-	"github.com/gorilla/mux"
 	"github.com/gorilla/handlers"
+	"github.com/gorilla/mux"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
@@ -207,7 +207,7 @@ func PartLabelHandler(w http.ResponseWriter, r *http.Request) {
 	// generate label using python script
 	dir, _ := os.Getwd()
 	fmt.Println(dir)
-	cmd := exec.Command(dir + "/dymo-labelgen/main.py",
+	cmd := exec.Command(dir+"/dymo-labelgen/main.py",
 		part.Brief,
 		"https://inventory.justbuchanan.com/part/"+part.Id,
 		"--bbox",
@@ -238,7 +238,7 @@ func PartLabelHandler(w http.ResponseWriter, r *http.Request) {
 
 	// set header info
 	w.Header().Set("Content-Type", "application/pdf")
-	w.Header().Set("Content-Disposition", "attachment; filename=\"" + filename + "\"")
+	w.Header().Set("Content-Disposition", "attachment; filename=\""+filename+"\"")
 	w.Header().Set("Content-Length", strconv.FormatInt(pdfSize, 10))
 
 	// write pdf to http response

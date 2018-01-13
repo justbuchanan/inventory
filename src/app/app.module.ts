@@ -3,11 +3,11 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { FormsModule } from "@angular/forms";
 import { HttpModule } from "@angular/http";
-import { MdCardModule } from "@angular2-material/card";
-import { MdToolbarModule } from "@angular2-material/toolbar";
-import { MdButtonModule } from "@angular2-material/button";
-import { MdIconModule, MdIconRegistry } from "@angular2-material/icon";
-import { MdInputModule } from "@angular2-material/input";
+import { MatCardModule } from "@angular/material/card";
+import { MatToolbarModule } from "@angular/material/toolbar";
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule, MatIconRegistry } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
 import { NgPipesModule } from "ng-pipes";
 
 import { AppComponent } from "./app.component";
@@ -33,15 +33,15 @@ const appRoutes: Routes = [
     BrowserModule,
     FormsModule,
     HttpModule,
-    MdCardModule,
-    MdToolbarModule,
-    MdButtonModule,
-    MdIconModule,
-    MdInputModule,
+    MatCardModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    MatInputModule,
     RouterModule.forRoot(appRoutes),
     NgPipesModule
   ],
-  providers: [MdIconRegistry, PartService],
+  providers: [MatIconRegistry, PartService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

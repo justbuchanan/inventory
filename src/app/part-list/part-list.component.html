@@ -1,5 +1,5 @@
 <div>
-    <md-input [(ngModel)]="query" placeholder='Search'></md-input>
+    <input matInput [(ngModel)]="query" placeholder='Search'>
     <ul class="parts">
         <div *ngFor="let part of parts | fuzzy:query">
             <app-part [part]="part" (delete)="this.deletePart($event)"></app-part>

@@ -1,12 +1,12 @@
-<md-card>
-    <md-card-subtitle>ID: {{part.id}}</md-card-subtitle>
-    <md-card-title>{{part.brief}}</md-card-title>
-    <md-card-content>{{part.description}}</md-card-content>
-    <md-card-content>Quantity: {{part.quantity}}</md-card-content>
-    <a md-raised-button color="primary" href="/api/part/{{part.id}}/label">
+<mat-card>
+    <mat-card-subtitle>ID: {{part.id}}</mat-card-subtitle>
+    <mat-card-title>{{part.brief}}</mat-card-title>
+    <mat-card-content>{{part.description}}</mat-card-content>
+    <mat-card-content>Quantity: {{part.quantity}}</mat-card-content>
+    <a mat-raised-button color="primary" href="/api/part/{{part.id}}/label">
         Download Label
     </a>
 
-    <button md-raised-button color="warn" (click)="onEditPart()">Edit</button>
-    <button md-raised-button color="warn" (click)="delete.emit(part.id)">Delete</button>
-</md-card>
+    <button mat-raised-button color="warn" (click)="onEditPart()">Edit</button>
+    <button mat-raised-button color="warn" (click)="delete.emit(part.id)">Delete</button>
+</mat-card>

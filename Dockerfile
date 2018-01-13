@@ -1,9 +1,7 @@
 FROM justbuchanan/docker-archlinux
 
 RUN pacman -Syu --noconfirm
-RUN pacman -S --noconfirm nodejs npm gcc python python-pip go git
-RUN npm install -g angular-cli
-RUN ng version
+RUN pacman -S --noconfirm nodejs gcc python python-pip go git python2 yarn
 
 ENV GOPATH $HOME/go
 RUN go get github.com/gorilla/mux \
@@ -11,14 +9,17 @@ RUN go get github.com/gorilla/mux \
     github.com/jinzhu/gorm \
     github.com/jinzhu/gorm/dialects/sqlite
 
+RUN yarn global add @angular/cli
+RUN ng version
+
 RUN mkdir inventory
 WORKDIR inventory
 
 COPY dymo-labelgen ./dymo-labelgen
 RUN pip install -r dymo-labelgen/requirements.txt
 
-COPY package.json ./
-RUN npm install
+COPY package.json yarn.lock ./
+RUN yarn install
 
 COPY backend ./backend
 
@@ -26,7 +27,7 @@ COPY backend ./backend
 COPY protractor.conf.js tslint.json karma.conf.js angular-cli.json ./
 COPY src ./src
 # TODO: fix ng build
-RUN ng build --env=prod || true
+RUN ng build --env=prod
 
 VOLUME "/data"
 EXPOSE 8080
